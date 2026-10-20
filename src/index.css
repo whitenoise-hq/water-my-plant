@@ -1,0 +1,32 @@
+:root {
+  --font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+    system-ui, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  font-family: var(--font-family);
+}
+
+/* TDS가 body에 토스 글꼴을 지정해서, 더 높은 우선순위로 Pretendard를 적용해요 */
+html body,
+button,
+input,
+textarea {
+  font-family: var(--font-family);
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+@media (min-width: 481px) {
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: #f5f9f6 !important;
+  }
+}

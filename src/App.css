@@ -1,0 +1,974 @@
+:root {
+  /* 흰 바탕에 초록 포인트. 바탕은 아주 옅은 연둣빛이라 흰 카드가 떠 보여요 */
+  --color-bg: #f5f9f6;
+  --color-card: #ffffff;
+  --color-green: #1fa855;
+  --color-green-strong: #17914a;
+  --color-green-weak: #e7f6ed;
+  --color-mint: #d6f0e0;
+  --color-text: #15201a;
+  --color-text-sub: #66736b;
+  --color-text-weak: #a8b2ac;
+  --color-line: #edf1ee;
+  --color-error: #f04452;
+  --shadow-card: 0 1px 2px rgba(21, 32, 26, 0.04), 0 6px 20px rgba(21, 32, 26, 0.05);
+  --radius-card: 22px;
+  --bottom-actions-height: 84px;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--color-bg) !important;
+  color: var(--color-text);
+}
+
+#root {
+  width: 100%;
+  max-width: 480px;
+}
+
+.app {
+  min-height: 100vh;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 24px);
+}
+
+.page {
+  padding: 8px 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card {
+  background: var(--color-card);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 20px;
+}
+
+.icon-button {
+  appearance: none;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: none;
+  color: var(--color-text-sub);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.icon-button:disabled {
+  color: var(--color-text-weak);
+  cursor: default;
+}
+
+.soft-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: var(--color-green-weak);
+  color: var(--color-green);
+  flex-shrink: 0;
+}
+
+.text-button {
+  appearance: none;
+  border: none;
+  background: none;
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text-sub);
+  cursor: pointer;
+}
+
+.text-button.danger {
+  color: var(--color-error);
+  margin-top: 8px;
+}
+
+/* 홈 머리말 */
+.home-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 20px 0 4px;
+}
+
+.home-date {
+  margin: 0 0 2px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-green);
+}
+
+.home-header h1 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.6px;
+}
+
+.home-header-actions {
+  display: flex;
+  margin-right: -8px;
+}
+
+/* 오늘 진행 요약 */
+/* 오늘 진행 요약은 식물 카드와 구분되게 민트 그라데이션 바탕으로 둬요 */
+.summary-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 26px;
+  padding: 22px 20px;
+  background: linear-gradient(135deg, #e3f7ea 0%, #cdeedb 100%);
+}
+
+/* 오른쪽 아래 잎 모양 장식 */
+.summary-card::after {
+  content: "";
+  position: absolute;
+  right: -36px;
+  bottom: -48px;
+  width: 140px;
+  height: 140px;
+  border-radius: 70% 0 70% 0;
+  background: rgba(31, 168, 85, 0.12);
+  transform: rotate(-20deg);
+  pointer-events: none;
+}
+
+.summary-card.complete {
+  background: linear-gradient(135deg, #22b45d, #149247);
+  color: #ffffff;
+}
+
+.summary-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.streak {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-green-strong);
+}
+
+.summary-card.complete .streak {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.summary-count {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-text-sub);
+}
+
+.summary-card.complete .summary-count {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.summary-title {
+  position: relative;
+  display: block;
+  margin: 16px 0 14px;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  word-break: keep-all;
+}
+
+.progress {
+  position: relative;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.75);
+  overflow: hidden;
+}
+
+.summary-card.complete .progress {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.progress div {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-green);
+  transition: width 0.4s ease;
+}
+
+.summary-card.complete .progress div {
+  background: #ffffff;
+}
+
+/* 식물 목록 제목 */
+.section-title {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin: 16px 2px 0;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+}
+
+.section-title span {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-green);
+}
+
+/* 식물 카드 */
+.plant-list {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.plant-card {
+  background: var(--color-card);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 16px;
+  transition: background 0.2s;
+}
+
+.plant-card.is-watered {
+  background: #f1fbf5;
+}
+
+.plant-card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.plant-card-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.plant-card-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.plant-card-text strong {
+  font-size: 17px;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.plant-card-text > span {
+  font-size: 13px;
+  color: var(--color-text-sub);
+}
+
+.plant-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  background: var(--color-green-weak);
+  color: var(--color-green);
+}
+
+.plant-icon.kind-succulent {
+  background: #e3f4f1;
+  color: #16a08a;
+}
+
+.plant-icon.kind-flower {
+  background: #fdecf1;
+  color: #e5547a;
+}
+
+.plant-icon.kind-herb {
+  background: #eef6dc;
+  color: #6aa31c;
+}
+
+.plant-icon.kind-tree {
+  background: #f1efe4;
+  color: #7a7a3a;
+}
+
+.plant-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px 7px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.plant-badge.due {
+  background: #e6f2ff;
+  color: #2a7ae2;
+}
+
+.plant-badge.done {
+  background: var(--color-green);
+  color: #ffffff;
+}
+
+.plant-badge.rest {
+  background: var(--color-line);
+  color: var(--color-text-sub);
+}
+
+/* 상세(기록)로 가는 화살표 버튼 */
+.detail-link {
+  margin-right: -8px;
+  color: var(--color-text-weak);
+}
+
+.plant-card-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.care-button {
+  appearance: none;
+  border: none;
+  height: 44px;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    transform 0.1s;
+}
+
+.care-button:active {
+  transform: scale(0.97);
+}
+
+.care-button.water {
+  background: var(--color-green-weak);
+  color: var(--color-green-strong);
+}
+
+.care-button.water.selected {
+  background: var(--color-green);
+  color: #ffffff;
+}
+
+.care-button.skip {
+  background: #f2f4f3;
+  color: var(--color-text-sub);
+}
+
+.care-button.skip.selected {
+  background: #5f6b64;
+  color: #ffffff;
+}
+
+/* 어제 기록 복구 */
+.recover-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-radius: var(--radius-card);
+  background: var(--color-card);
+  box-shadow: var(--shadow-card);
+}
+
+.recover-card div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.recover-card strong {
+  font-size: 15px;
+}
+
+.recover-card span:not(.soft-icon) {
+  font-size: 13px;
+  color: var(--color-text-sub);
+  word-break: keep-all;
+}
+
+/* 알림 안내 */
+.reminder-prompt {
+  display: flex;
+  align-items: center;
+  padding: 14px 8px 14px 16px;
+  border-radius: var(--radius-card);
+  background: var(--color-card);
+  box-shadow: var(--shadow-card);
+}
+
+.reminder-prompt-main {
+  appearance: none;
+  border: none;
+  background: none;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+}
+
+.reminder-prompt-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.reminder-prompt-text strong {
+  font-size: 15px;
+}
+
+.reminder-prompt-text span {
+  font-size: 13px;
+  color: var(--color-text-sub);
+}
+
+/* 식물이 없을 때 */
+.empty-home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 56px 0 24px;
+}
+
+.empty-icon {
+  width: 96px;
+  height: 96px;
+  border-radius: 32px;
+  display: grid;
+  place-items: center;
+  background: var(--color-green-weak);
+  color: var(--color-green);
+  margin-bottom: 20px;
+}
+
+.empty-home h2 {
+  margin: 0 0 8px;
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+}
+
+.empty-home p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--color-text-sub);
+}
+
+/* 뒤로가기와 제목 */
+.back-bar {
+  margin: 8px 0 -8px -8px;
+}
+
+.back-bar button {
+  appearance: none;
+  border: none;
+  background: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 8px;
+  font-size: 15px;
+  color: var(--color-text-sub);
+  cursor: pointer;
+}
+
+.page-header {
+  padding: 20px 0 4px;
+}
+
+.page-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+}
+
+.page-header p {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: var(--color-text-sub);
+}
+
+/* 식물 등록 폼: 흰 카드 하나에 항목을 모으고, 입력칸은 낮고 옅은 회색으로 */
+.form-card {
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
+  padding: 4px 18px;
+  border-radius: var(--radius-card);
+  background: var(--color-card);
+  box-shadow: var(--shadow-card);
+}
+
+.form-section {
+  padding: 18px 0;
+}
+
+.form-section + .form-section {
+  border-top: 1px solid var(--color-line);
+}
+
+.form-label {
+  display: block;
+  margin: 0 0 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text-sub);
+}
+
+.text-input {
+  width: 100%;
+  box-sizing: border-box;
+  height: 46px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  padding: 0 14px;
+  background: #f3f6f4;
+  /* 16px보다 작으면 iOS에서 입력할 때 화면이 확대돼요 */
+  font-size: 16px;
+  color: var(--color-text);
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+
+.text-input::placeholder {
+  color: var(--color-text-weak);
+}
+
+.text-input:focus {
+  background: var(--color-card);
+  border-color: var(--color-green);
+}
+
+.field-counter {
+  margin: 6px 2px 0;
+  text-align: right;
+  font-size: 12px;
+  color: var(--color-text-weak);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 36px;
+  padding: 0 13px;
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  background: var(--color-card);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+}
+
+.chip.with-icon svg {
+  color: var(--color-text-weak);
+}
+
+.chip.selected {
+  background: var(--color-green-weak);
+  border-color: var(--color-green);
+  color: var(--color-green-strong);
+  font-weight: 700;
+}
+
+.chip.selected svg {
+  color: var(--color-green);
+}
+
+.custom-interval {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.custom-interval .text-input {
+  width: 88px;
+  text-align: center;
+}
+
+.custom-interval span {
+  font-size: 15px;
+  color: var(--color-text-sub);
+}
+
+.form-hint {
+  margin: 10px 2px 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-text-weak);
+  word-break: keep-all;
+}
+
+/* 식물 상세 */
+.detail-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 0 4px;
+}
+
+.detail-header .plant-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 20px;
+}
+
+.detail-header div {
+  flex: 1;
+  min-width: 0;
+}
+
+.detail-header h1 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+}
+
+.detail-header p {
+  margin: 2px 0 0;
+  font-size: 14px;
+  color: var(--color-text-sub);
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.stat-grid div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px;
+  border-radius: 18px;
+  background: var(--color-card);
+  box-shadow: var(--shadow-card);
+}
+
+.stat-grid span {
+  font-size: 12px;
+  color: var(--color-text-sub);
+}
+
+.stat-grid strong {
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.month-nav strong {
+  font-size: 16px;
+}
+
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  text-align: center;
+}
+
+.weekday {
+  font-size: 12px;
+  color: var(--color-text-weak);
+  padding-bottom: 4px;
+}
+
+.day {
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  font-size: 14px;
+  color: var(--color-text);
+}
+
+.day.is-watered {
+  background: var(--color-green);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.day.is-skipped {
+  background: #f2f4f3;
+  color: var(--color-text-sub);
+}
+
+.day.today {
+  box-shadow: inset 0 0 0 2px var(--color-mint);
+}
+
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 14px;
+  font-size: 12px;
+  color: var(--color-text-sub);
+}
+
+.legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.dot.watered {
+  background: var(--color-green);
+}
+
+.dot.skipped {
+  background: #e3e7e5;
+}
+
+/* 설정 */
+.setting-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+}
+
+.setting-row div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.setting-row strong {
+  font-size: 15px;
+}
+
+.setting-row span:not(.soft-icon) {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--color-text-sub);
+  word-break: keep-all;
+}
+
+/* 어제 기록 시트 */
+.yesterday-list {
+  list-style: none;
+  margin: 0;
+  padding: 4px 24px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.yesterday-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.yesterday-list .plant-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+}
+
+.yesterday-list strong {
+  flex: 1;
+  min-width: 0;
+  font-size: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.segmented {
+  display: flex;
+  padding: 3px;
+  border-radius: 12px;
+  background: #f2f4f3;
+}
+
+.segmented button {
+  appearance: none;
+  border: none;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-sub);
+  cursor: pointer;
+}
+
+.segmented button.selected {
+  background: var(--color-card);
+  color: var(--color-green-strong);
+  box-shadow: 0 1px 3px rgba(21, 32, 26, 0.12);
+}
+
+.sheet-cta {
+  padding: 8px 20px calc(16px + env(safe-area-inset-bottom));
+}
+
+/* 배너 */
+.banner-slot {
+  width: 100%;
+  min-height: 96px;
+  margin-top: 8px;
+}
+
+/* 배너 아래 홈 머리말은 위 여백을 줄여요 */
+.banner-slot + .home-header {
+  padding-top: 8px;
+}
+
+/* 하단 고정 버튼 */
+.bottom-actions {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  gap: 8px;
+  padding: 12px 20px calc(12px + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, var(--color-bg) 75%, rgba(245, 249, 246, 0));
+  z-index: 9;
+}
+
+.bottom-actions > * {
+  flex: 1;
+}
+
+.page:has(~ .bottom-actions),
+.page:has(.bottom-actions) {
+  padding-bottom: var(--bottom-actions-height);
+}
+
+@media (min-width: 481px) {
+  .bottom-actions {
+    left: 50%;
+    right: auto;
+    width: 480px;
+    box-sizing: border-box;
+    transform: translateX(-50%);
+  }
+}
+
+.loading {
+  display: grid;
+  place-items: center;
+  gap: 12px;
+  min-height: 60vh;
+  text-align: center;
+  color: var(--color-text-weak);
+}
+
+.save-error {
+  margin: 12px 20px 0;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: #fff0f1;
+  color: var(--color-error);
+  font-size: 14px;
+}
+
+/* 앱 전체에서 눌렀을 때 생기는 포커스 테두리를 없애요.
+   TDS 기본 스타일의 button:focus 규칙이 더 우선이라 !important로 덮어써요. */
+*:focus,
+*:focus-visible {
+  outline: none !important;
+}
+
+/* TDS 토스트 기본 배경이 흰색이라, 화면과 구분되는 어두운 토스트로 바꿔요. */
+#tds-mobile-portal-container [style*="--toast-background-color"] {
+  --toast-background-color: rgba(21, 32, 26, 0.92) !important;
+  --toast-text-color: #ffffff !important;
+}
+
+/* 설정 화면 아래 앱 정보 */
+.app-info {
+  margin: 24px 0 0;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--color-text-weak);
+}
